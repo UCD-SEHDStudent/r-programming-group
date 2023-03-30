@@ -1,0 +1,353 @@
+---
+title: "Intro to R - Spring 2023"
+author: "Angela Rexwinkle"
+date: "2023-01-26"
+output: html_document
+---
+
+Many portions of this introduction were used from other
+online sources. Some of these include:
+Tutorial from LISA at UC Boulder<https://osf.io/6jb9t>
+R Cheat Sheet <https://iqss.github.io/dss-workshops/R/Rintro/base-r-cheat-sheet.pdf>
+R Primer dashboard - practice!
+<https://posit.cloud/learn/primers>
+
+Assessment 
+<https://jayholster.shinyapps.io/RLevel0Assessment/>
+
+
+```{r}
+x <- 10 # This is an example of a comment.
+```
+
+
+Follow prompts to install.
+
+```{r install.packages, error = TRUE}
+install.packages("tidyverse")
+```
+
+```{r}
+library(tidyverse)
+
+```
+
+
+You will need to run the code chunk in order to process the change in working directory. To run a code chunk, you can select the code you want to run and hit command and enter simultaneously on Mac, or control and enter on a Windows machine. Alternatively, you can click the green play button in the top right corner of the code chunk to run the entire cell.
+
+```{r workingdirectory, eval = F}
+setwd('/Users/username/Desktop/R/Short Courses')
+```
+
+
+
+```{r number}
+7
+```
+
+
+```{r mathematical}
+7+2
+```
+
+
+```{r multiple objects}
+7+2-10*40
+```
+
+
+```{r sum function}
+sum(1, 10)
+```
+
+
+This won't work. Why? 
+
+```{r sum function error, error = T}
+sum(1 10)
+```
+
+You can read this code aloud saying "sum all
+numbers from 1 to 10."
+
+```{r sum sequence}
+sum(1:10)
+```
+
+you might
+encounter a new function which you are not familiar with, like `seq()` below. To investigate what this function does, place your cursor after 'seq' but before the first parenthesis, and press tab. Hover over the function `seq` in the dropdown list to see a full description. If you need more information, you might use the `help()` function, with the name of the function you are curious about inside the parenthesis. The
+description indicates that the function is used to generate regular sequences. The information that emerges from using the `help()` function describes a list of arguments, including from, to, and by. This pane will populate on the bottom right side of RStudio when you run the `help()` function. 
+
+```{r seq help}
+seq(0, 20, 4)
+help(seq)
+```
+
+
+Other ways to get help:
+
+```{r}
+?mean # Get help of a particular function
+help.search('weighted mean') # search help for a word or phrase.
+help(package = 'dplyr') # Get help with package
+str(iris) # Get summary of structure of object
+class(iris) # find the class an object belongs to.
+```
+
+## Objects
+
+You may have heard the phrase "object-oriented programming." This phrase
+is accurate as all coding in R relies on the assignment of objects. When
+you assign an object in R, you are indicating that you want R to
+remember this assignment so it can be used as part of other code. `pi`
+is an example of an object built into base R. The input below is not
+numeric, but still represents a number. Run the code, and you will see
+that the word pi has been assigned the numeric value of pi. This is one
+of the few predefined objects in R.
+
+```{r pi object}
+pi 
+```
+
+You might also assign a number pi to an object you name yourself.
+
+```{r pi assignment}
+x <- 3.141593
+```
+
+To assign values to objects, as the numerical content of pi was to the
+object x, use the `<-` operator. For example, the code segment below
+assigns the value 50 to the object 'a', and 14 to the object 'b' using
+the `<-` operator. It may be helpful to read the code out loud, saying a
+is 50, and b is 14.
+
+```{r twoobjects1}
+a <- 50
+b <- 14 
+```
+
+There are five basic types of objects in R. The objects a, b, and x are
+each examples of **vectors**, or homogeneous data made up of characters,
+logical, numerical, or integer values. Additionally, a **list** of
+heterogeneous data (i.e., involving multiple data types) can be assigned
+to an object. **Matricies**, or two-dimensional data with undefined
+column headers, and **data frames**, a matrix with multiple specified
+columns that represent a certain type of observation seen in
+corresponding rows, can also be assigned to objects. Moreover, many
+objects are typically involved in coding and they tend to interact with
+each other.
+
+See the code chunk below for a simple example of the interaction of two
+objects that were assigned in the previous code chunk.
+
+```{r twoobjects2}
+a + b
+```
+
+Notice that R held the object assignments from the previous cell. You
+can also assign a function to an object, and call that object to execute
+the function. For instance:
+
+```{r functionobject}
+addvalues <- a + b
+addvalues
+```
+
+The product is not reached because R understands the input `addvalues`,
+but because the object add values calls the newly defined function 'a +
+b'. Try switching the values of a and b three chunks ago, and running
+the subsequent chunks. Remember that objects are case sensitive and
+cannot contain spaces. If you ran the code 'A+B', what would happen?
+
+# Case Study
+
+You are approached by a colleague who wants create code that sums
+numerical values associated with letters in others' names (e.g., a = 1,
+b = 2,... z = 26). To start on this project, create 26 objects, one for
+each letter of the alphabet. Then sum your own name using mathematical
+expressions and the objects you created.
+
+```{r}
+a <- 1
+b <- 2
+c <- 3 # and so on
+```
+
+# Working with Data
+
+## Matricies
+
+Matrices include rectangular data of a single format (numerical or
+text). Let's construct a matrix to work with the concept. In the example
+below, a sequence is created from 1 to 100, separated by 5s. Two
+matricies are then created with the argument for data set to the object
+'numbers'. However, the shaping arguments are different for each matrix.
+
+```{r matricies}
+numbers <- seq(1, 100, 5)
+twocolumns <- matrix(data = numbers, ncol = 5) 
+fourrows <- matrix(data = numbers, nrow = 10) 
+```
+
+Use the empty box below to call each matrix object that you created.
+Notice that when you set the argument 'ncol' the data are shaped based
+on the desired number of columns, which is assigned as an argument for
+the matrix function.
+
+```{r call}
+twocolumns
+fourrows
+
+```
+
+## Dataframes
+
+A dataframe contains rectangular with rows and columns, and may contain
+different data types. Base R includes several datasets that can be
+called into dataframes, and assigned to objects. The View function
+allows for matricies and dataframes to be easily accessed by the user.
+To view the dataframe 'mtcars', run the code chunk below.
+
+```{r mtcars}
+View(mtcars)
+```
+
+Try it without the View() function.
+
+```{r mtcars2}
+mtcars
+```
+
+The head() and tail() functions show the first and last six rows of a
+dataframe. Notice that when you run the entire cell, R studio allows you
+to scroll through the various outputs.
+
+```{r mtcars3}
+head(mtcars)
+tail(mtcars)
+```
+
+To investigate the names of the columns, run the function colnames().
+For a summary of each column of data, call the summary() function.
+
+```{r mtcars4}
+colnames(mtcars)
+summary(mtcars)
+```
+
+Now change the name of column 3 from "disp" to "displace"
+
+```{r mtcars5}
+colnames(mtcars)[3] <- "displace"
+colnames(mtcars)
+```
+
+Using the above code chunk as a model, rename the mpg column to Miles
+Per Gallon. Hint: the [3] represents the third column in the dataset.
+
+```{r mtcars6}
+colnames(mtcars)[1] <- "Miles Per Gallon"
+summary(mtcars)
+mtcars$cylinder <- mtcars$cyl
+rename(mtcars, horsepower = hp)
+```
+
+## Importing and Exporting Data
+
+We will be using a built-in dataset from the `fivethirtyeight` package
+that contains information on US Births from 1994 to 2003. Call the
+dataset with the object named `'US_births_1994_2003` and assign it to
+the object `data` with the `<-` operator. This code can be read as
+"create a new object 'data' identical to the dataset
+'US_births_1994_2003'." The purpose of renaming this data object is to
+simplify subsequent coding practices. That said, you can choose to
+rename your dataset anything you'd like, or keep the name as it was
+originally stated.
+
+### R-based Data
+
+```{r echo = TRUE, message = F, warning = F}
+library(fivethirtyeight)
+data <- US_births_1994_2003
+```
+
+Practice calling another dataset. Try calling the `data()`function or
+visiting the `fivethirtyeight` website and select a dataset that you are
+interested in examining. Once you have chosen a dataset, you can assign
+that data object to another name, or simply type in the name of the
+dataset into a code chunk. Alternatively, you can use the `data()`
+funciton with the name of the dataset inside the parenthesis to specify
+which dataset you are calling in.
+
+If you would like to import your own data, use the `tidyverse`
+conventions below. Remember, you must have the `tidyverse` library
+installed and called for this function to work.
+
+### CSV Data
+
+```{r, eval = F}
+data <- read_csv('filename.csv')
+```
+
+Use caution with xlsx file types that contain multiple sheets. CSVs are
+utilized more frequently than xlsx files as `tidyverse` handles them
+quickly and simply. To load an xlsx file, you will need to explicitly
+install the "readxl" package. You can then call the specific sheet you
+want to load using the `sheet` argument. You will need to assign that
+sheet to an object to save that particular sheet for further examination
+and manipulation.
+
+### XLSX Data
+
+```{r, eval = F}
+install.packages('readxl')
+library(readxl)
+data <- read_excel(spreadsheet, sheet = "sheet1")
+```
+
+`Haven` is a package that is associated with, but not inherently a part
+of, the `tidyverse` package for SPSS, SAS, and STATA filetypes. You will
+need to follow similar conventions as with the readxl library. You can
+either define the path using an object, or explictly state the path in
+the ultimate function's parenthesis.
+
+### SPSS ".sav" Data
+
+```{r, eval = F}
+install.packages('haven')
+library(haven)
+path <- file.path("example.sav")
+data <- read_sav(path)
+
+```
+
+### SAS ".sas7bdat" or ".sas7bcat" Data
+
+```{r, eval = F}
+dataset <- read_sas("example.sas7bdat")
+```
+
+### For Stata ".dta" Data
+
+```{r, eval = F}
+data <- read_dta("example.dta")
+```
+
+### Exporting Data
+
+You can export data similarly to how you imported data. See the code
+chunk below for examples of export functions for each data filetype. It
+is important to note that each of these are exported from the data
+object, as it is assumed you will have edited that data object at some
+point while using R. Each of these functions will save a dataset in your
+working directory based on the characteristics of the object "data" at
+the time the function was run.
+
+```{r, eval = F}
+write_csv(data)
+write_excel(data)
+write_sav(data)
+write_sas(data)
+write_dta(data)
+```
+
